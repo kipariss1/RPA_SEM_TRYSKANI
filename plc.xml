@@ -1,0 +1,586 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
+  <fileHeader companyName="Неизвестно" productName="Unnamed" productVersion="1" creationDateTime="2021-04-15T23:27:11"/>
+  <contentHeader name="Unnamed" modificationDateTime="2021-05-06T17:02:16">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="10" y="10"/>
+      </fbd>
+      <ld>
+        <scaling x="10" y="10"/>
+      </ld>
+      <sfc>
+        <scaling x="10" y="10"/>
+      </sfc>
+    </coordinateInfo>
+  </contentHeader>
+  <types>
+    <dataTypes>
+      <dataType name="SuperStatesEnum">
+        <baseType>
+          <enum>
+            <values>
+              <value name="ST_INICIALIZACE"/>
+              <value name="ST_RESET_POSITION_OF_MOTORS"/>
+              <value name="ST_WAIT_FOR_COMMAND"/>
+              <value name="ST_MODE_SELECTION"/>
+              <value name="ST_MANUAL_MODE"/>
+              <value name="ST_AUTOMATIC_MODE"/>
+              <value name="ST_CHECK_POSITION_OF_MOTORS"/>
+              <value name="ST_STOP"/>
+              <value name="ST_EMERGENCY_STOP"/>
+            </values>
+          </enum>
+        </baseType>
+        <initialValue>
+          <simpleValue value="ST_INICIALIZACE"/>
+        </initialValue>
+      </dataType>
+    </dataTypes>
+    <pous>
+      <pou name="SuperStavy" pouType="program">
+        <interface>
+          <localVars>
+            <variable name="I_Start">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Start button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_PowerOn">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Power on button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_StopBtn">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Stop button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_StopResBtn">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Stop reset button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_EmStopBtn">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Emergency stop button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_EmStopResBtn">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Emergency stop reset button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_ManualSelector">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Manual mode selector button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_AutomaticSelector">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Automatic mode selector button]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="SuperStates">
+              <type>
+                <derived name="SuperStatesEnum"/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Enumeration of super states]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_A0">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from A motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_A1">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from A motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_B0">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from B motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_B1">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from B motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_C0">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from C motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_C1">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[End sensor from C motor]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="I_Qt">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Output from timer]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_A">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[A motor control]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_B">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[B motor control]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_C">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[C motor control]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_PositionOk">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Flag, that position of motors is OK]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_PositionNotOk">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Flag, that position of motors is not OK]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Q_It">
+              <type>
+                <BOOL/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Output from technological sequence on TON input]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="InputArr">
+              <type>
+                <array>
+                  <dimension lower="0" upper="7"/>
+                  <baseType>
+                    <BYTE/>
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Array for storing the inputs]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="InputWord">
+              <type>
+                <INT/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Int Var for storing the inputs after conversion]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="TRANS_MATX">
+              <type>
+                <array>
+                  <dimension lower="0" upper="8"/>
+                  <baseType>
+                    <INT/>
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <simpleValue value="2#00100101"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00100110"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00101010"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#01101010"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00100110"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00010110"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00011010"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#01011010"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00010110"/>
+                  </value>
+                </arrayValue>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Matrix for storing the conditions of transitions]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="OUTPT_MATX">
+              <type>
+                <array>
+                  <dimension lower="0" upper="8"/>
+                  <baseType>
+                    <INT/>
+                  </baseType>
+                </array>
+              </type>
+              <initialValue>
+                <arrayValue>
+                  <value>
+                    <simpleValue value="2#00000101"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000111"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00001111"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000101"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000001"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000011"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00001011"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000001"/>
+                  </value>
+                  <value>
+                    <simpleValue value="2#00000100"/>
+                  </value>
+                </arrayValue>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Matrix for storing the outputs, depending on conditions]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="iTech">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Index of the state in technological sequence]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="iTechBit">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Index of the state in technological sequence]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="ByteCompare">
+              <type>
+                <BYTE/>
+              </type>
+              <initialValue>
+                <simpleValue value="2#00000001"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Var for comparing if ]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="Qs">
+              <type>
+                <array>
+                  <dimension lower="0" upper="7"/>
+                  <baseType>
+                    <BOOL/>
+                  </baseType>
+                </array>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Array of bools (outputs )for mapping on real outputs]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="TechnologicalSequenceState">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[The number of Technological sequence state (All states are in TRANS_MATX, OUTPT_MATX)]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="SuperSequenceState">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[The number of Super sequence state: 1-ST_INICIALIZACE, 2-ST_RESET_POSITION_OF_MOTORS, 3-ST_WAIT_FOR_COMAND, 4-ST_MODE_SELECTION, 5-ST_MANUAL_MODE, 6-ST_AUTOMATIC_MODE, 7-ST_CHECK_POSITION_OF_MOTORS, 8-ST_STOP, 0-EMERGENCY_STOP]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="TON_0">
+              <type>
+                <derived name="TON"/>
+              </type>
+              <documentation>
+                <xhtml:p><![CDATA[Timer on rising edge for technological sequence]]></xhtml:p>
+              </documentation>
+            </variable>
+            <variable name="BlastingTime">
+              <type>
+                <TIME/>
+              </type>
+              <initialValue>
+                <simpleValue value="t#5s"/>
+              </initialValue>
+              <documentation>
+                <xhtml:p><![CDATA[Time of the blasting procedure (tryskání)]]></xhtml:p>
+              </documentation>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[
+IF (I_EMSTOPBTN = true) THEN
+  
+    SuperStates := ST_EMERGENCY_STOP;
+  
+END_IF;
+
+
+
+CASE SuperStates OF
+  
+  ST_INICIALIZACE:
+    SuperSequenceState := 1;
+    IF (I_Start = true) AND (I_PowerOn = true) THEN
+      
+      SuperStates := ST_RESET_POSITION_OF_MOTORS;
+      
+    END_IF;
+    
+  ST_RESET_POSITION_OF_MOTORS:
+    SuperSequenceState := 2;
+    Q_A := false;
+    Q_B := false;
+    Q_C := true;
+    IF I_A0 AND I_B0 AND I_C1 THEN 
+      Q_PositionOk := true;
+      Q_PositionNotOk := false;
+      SuperStates := ST_WAIT_FOR_COMMAND;
+    END_IF;
+    
+  ST_WAIT_FOR_COMMAND:
+    SuperSequenceState := 3;
+    Q_PositionOk := false;
+    Q_PositionNotOk := false;
+    
+    SuperStates := ST_MODE_SELECTION;
+    
+  ST_MODE_SELECTION:
+    SuperSequenceState := 4;
+    IF (I_ManualSelector) THEN
+        SuperStates := ST_MANUAL_MODE;
+    ELSIF (I_AutomaticSelector) THEN
+        SuperStates := ST_AUTOMATIC_MODE;
+    END_IF;
+    (*TODO// Comeback from this state to STOP*)
+    
+  ST_MANUAL_MODE:
+    SuperSequenceState := 5;
+    I_A0 := 1;
+    (*TODO MANUAL MODE AND TRANSITION TO ST_CHECK_MOTORS*)
+    
+  ST_AUTOMATIC_MODE:
+    SuperSequenceState := 6;
+    
+    (*  Conversion of all BOOL in's, q's to INT    *)
+    (*BYTE:                  7  6  5  4  3  2  1  0*)
+    (*Inputs localization:   - Qt C1 C0 B1 B0 A1 A0*)
+    (*Outpts localization:   -  -  -  - It  C  B  A*)
+    (*           I_Qt - Q of timer                 *)
+    (*           Q_It - In of timer                *)
+    
+    InputArr[0] := SHL(bool_to_byte(I_A0),0);
+    InputArr[1] := SHL(bool_to_byte(I_A1),1);
+    InputArr[2] := SHL(bool_to_byte(I_B0),2);
+    InputArr[3] := SHL(bool_to_byte(I_B1),3);
+    InputArr[4] := SHL(bool_to_byte(I_C0),4);
+    InputArr[5] := SHL(bool_to_byte(I_C1),5);
+    InputArr[6] := SHL(bool_to_byte(I_Qt),6);
+    
+    InputWord := byte_to_int(InputArr[0]) + byte_to_int(InputArr[1]) + byte_to_int(InputArr[2]) + byte_to_int(InputArr[3]) + byte_to_int(InputArr[4]) + byte_to_int(InputArr[5]) + byte_to_int(InputArr[6]);
+    
+    (*   End of Conversion   *)
+    
+    
+    IF (InputWord = TRANS_MATX[iTech]) THEN
+      
+      FOR iTechBit:= 0 TO 7 DO                                                            (*Making the outputs HIGH/LOW by going throught bitwise*)
+          IF ((int_to_byte(OUTPT_MATX[iTech]) AND SHL(ByteCompare, iTechBit)) <> 0) THEN  (*Going throught one row of OUTPT_MATX and checking, which outputs should be TRUE*)
+            Qs[iTechBit] := true;
+          ELSE
+            Qs[iTechBit] := false;
+          END_IF;
+      END_FOR;
+      
+      (*Mapping of outputs*)
+      Q_A := Qs[0];
+      Q_B := Qs[1];
+      Q_C := Qs[2];
+      Q_It := Qs[3]; 
+      (*End of mapping of outputs*)
+      
+      TechnologicalSequenceState := iTech;      (*Remembering the technological state*)
+      
+      iTech := iTech + 1;                       (*Going to the next state*)
+      
+    END_IF;
+    
+    (*Actions after on technological sequence is done*)
+    IF (iTech = 8) THEN                         (*Program has gone throught all technological states*)
+      
+      iTech := 0;                               (*Reset sequence*)
+      
+    ELSIF (iTech = 8) AND NOT (I_AutomaticSelector) THEN  (*Program has gone throught all technological states AND automatic selector is not pressed*)
+      
+      iTech := 0;                                         (*Reset sequence*) 
+      SuperStates := ST_CHECK_POSITION_OF_MOTORS;         (*Go to the next state*)
+      
+    ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
+      
+      SuperStates := ST_STOP;                             (*Go to stop state*)
+      
+    END_IF;
+    
+        
+  ST_CHECK_POSITION_OF_MOTORS:
+    SuperSequenceState := 7;
+    IF (I_A0 = true) AND (I_B0 = true) AND (I_C1 = true) THEN
+      Q_PositionOk := true;
+      SuperStates := ST_WAIT_FOR_COMMAND;
+    ELSE
+      Q_PositionOk := true;
+      SuperStates := ST_RESET_POSITION_OF_MOTORS;
+    END_IF;
+    
+  ST_STOP:
+    SuperSequenceState := 8; 
+    (*DO NOTHING*)
+    IF (I_StopResBtn) THEN
+      SuperStates := ST_AUTOMATIC_MODE;
+    END_IF;
+    
+  ST_EMERGENCY_STOP:
+    SuperSequenceState := 0;
+    I_PowerOn := false;
+    IF (I_EmStopResBtn) THEN
+      SuperStates := ST_WAIT_FOR_COMMAND;
+    END_IF;
+    
+END_CASE;
+
+
+
+(*Function block calling*)
+
+TON_0(IN := I_B1, PT := BlastingTime, Q => I_Qt);
+ 
+
+(*End of Function block calling*)
+
+]]></xhtml:p>
+          </ST>
+        </body>
+      </pou>
+    </pous>
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="Config0">
+        <resource name="Res0">
+          <task name="task0" priority="0" interval="T#20ms">
+            <pouInstance name="instance0" typeName="SuperStavy"/>
+          </task>
+        </resource>
+      </configuration>
+    </configurations>
+  </instances>
+</project>
