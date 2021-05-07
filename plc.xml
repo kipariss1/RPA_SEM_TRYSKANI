@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Неизвестно" productName="Unnamed" productVersion="1" creationDateTime="2021-04-15T23:27:11"/>
-  <contentHeader name="Unnamed" modificationDateTime="2021-05-07T16:28:01">
+  <contentHeader name="Unnamed" modificationDateTime="2021-05-07T16:34:28">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -546,7 +546,7 @@ CASE SuperStates OF
       
     (*ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
       
-     (* SuperStates := ST_STOP;                             (*Go to stop state*)
+     (* SuperStates := ST_STOP;                               (*Go to stop state*)
       
    (* END_IF;*)
     

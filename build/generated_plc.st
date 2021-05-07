@@ -160,7 +160,7 @@ PROGRAM SuperStavy
         
       (*ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
         
-       (* SuperStates := ST_STOP;                             (*Go to stop state*)
+       (* SuperStates := ST_STOP;                               (*Go to stop state*)
         
      (* END_IF;*)
       
