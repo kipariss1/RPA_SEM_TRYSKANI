@@ -148,7 +148,7 @@ PROGRAM SuperStavy
       END_IF;
       
       (*Actions after on technological sequence is done*)
-      IF (iTech = 8) THEN                         (*Program has gone throught all technological states*)
+      IF (iTech > 8) THEN                         (*Program has gone throught all technological states*)
         
         iTech := 0;                               (*Reset sequence*)
       END_IF;
