@@ -4,6 +4,7 @@
 
   <contentHeader name="Unnamed" modificationDateTime="2021-05-07T15:02:07">
 
+
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -50,6 +51,7 @@
               <initialValue>
                 <simpleValue value="1"/>
               </initialValue>
+
               <documentation>
                 <xhtml:p><![CDATA[Start button]]></xhtml:p>
               </documentation>
@@ -66,6 +68,7 @@
               </documentation>
             </variable>
             <variable name="I_StopBtn" address="%IX1.2">
+
               <type>
                 <BOOL/>
               </type>
@@ -205,6 +208,7 @@
               </documentation>
             </variable>
             <variable name="Q_C" address="%QX0.6">
+
               <type>
                 <BOOL/>
               </type>
