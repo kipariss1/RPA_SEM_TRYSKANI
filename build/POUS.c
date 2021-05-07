@@ -201,14 +201,14 @@ __end:
 
 
 void SUPERSTAVY_init__(SUPERSTAVY *data__, BOOL retain) {
-  __INIT_VAR(data__->I_START,1,retain)
-  __INIT_VAR(data__->I_POWERON,1,retain)
+  __INIT_VAR(data__->I_START,__BOOL_LITERAL(FALSE),retain)
+  __INIT_VAR(data__->I_POWERON,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_STOPBTN,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_STOPRESBTN,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_EMSTOPBTN,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_EMSTOPRESBTN,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_MANUALSELECTOR,__BOOL_LITERAL(FALSE),retain)
-  __INIT_VAR(data__->I_AUTOMATICSELECTOR,1,retain)
+  __INIT_VAR(data__->I_AUTOMATICSELECTOR,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->SUPERSTATES,SUPERSTATESENUM__ST_INICIALIZACE,retain)
   __INIT_VAR(data__->I_A0,__BOOL_LITERAL(FALSE),retain)
   __INIT_VAR(data__->I_A1,__BOOL_LITERAL(FALSE),retain)
@@ -246,7 +246,7 @@ void SUPERSTAVY_init__(SUPERSTAVY *data__, BOOL retain) {
   __INIT_VAR(data__->TECHNOLOGICALSEQUENCESTATE,0,retain)
   __INIT_VAR(data__->SUPERSEQUENCESTATE,1,retain)
   TON_init__(&data__->TON_0,retain);
-  __INIT_VAR(data__->BLASTINGTIME,__time_to_timespec(1, 0, 5, 0, 0, 0),retain)
+  __INIT_VAR(data__->BLASTINGTIME,__time_to_timespec(1, 0, 0, 0, 0, 0),retain)
 }
 
 // Code part
@@ -260,7 +260,9 @@ void SUPERSTAVY_body__(SUPERSTAVY *data__) {
     SUPERSTATESENUM __case_expression = __GET_VAR(data__->SUPERSTATES,);
     if ((__case_expression == SUPERSTATESENUM__ST_INICIALIZACE)) {
       __SET_VAR(data__->,SUPERSEQUENCESTATE,,1);
-      __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_RESET_POSITION_OF_MOTORS);
+      if (((__GET_VAR(data__->I_START,) == __BOOL_LITERAL(TRUE)) && (__GET_VAR(data__->I_POWERON,) == __BOOL_LITERAL(TRUE)))) {
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_RESET_POSITION_OF_MOTORS);
+      };
     }
     else if ((__case_expression == SUPERSTATESENUM__ST_RESET_POSITION_OF_MOTORS)) {
       __SET_VAR(data__->,SUPERSEQUENCESTATE,,2);
@@ -281,7 +283,11 @@ void SUPERSTAVY_body__(SUPERSTAVY *data__) {
     }
     else if ((__case_expression == SUPERSTATESENUM__ST_MODE_SELECTION)) {
       __SET_VAR(data__->,SUPERSEQUENCESTATE,,4);
-      __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_AUTOMATIC_MODE);
+      if (__GET_VAR(data__->I_MANUALSELECTOR,)) {
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_MANUAL_MODE);
+      } else if (__GET_VAR(data__->I_AUTOMATICSELECTOR,)) {
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_AUTOMATIC_MODE);
+      };
     }
     else if ((__case_expression == SUPERSTATESENUM__ST_MANUAL_MODE)) {
       __SET_VAR(data__->,SUPERSEQUENCESTATE,,5);
@@ -378,20 +384,36 @@ void SUPERSTAVY_body__(SUPERSTAVY *data__) {
             (BYTE)__GET_VAR(data__->BYTECOMPARE,),
             (INT)__GET_VAR(data__->ITECHBIT,))) != 0)) {
             __SET_VAR(data__->,QS,.table[(__GET_VAR(data__->ITECHBIT,)) - (0)],__BOOL_LITERAL(TRUE));
-          } else {
-            __SET_VAR(data__->,QS,.table[(__GET_VAR(data__->ITECHBIT,)) - (0)],__BOOL_LITERAL(FALSE));
           };
         };
         __SET_VAR(data__->,Q_A,,__GET_VAR(data__->QS,.table[(0) - (0)]));
         __SET_VAR(data__->,Q_B,,__GET_VAR(data__->QS,.table[(1) - (0)]));
         __SET_VAR(data__->,Q_C,,__GET_VAR(data__->QS,.table[(2) - (0)]));
-        __SET_VAR(data__->,Q_IT,,__GET_VAR(data__->QS,.table[(3) - (0)]));
+        __SET_VAR(data__->,Q_IT,,__GET_VAR(data__->QS,.table[(4) - (0)]));
         __SET_VAR(data__->,TECHNOLOGICALSEQUENCESTATE,,__GET_VAR(data__->ITECH,));
         __SET_VAR(data__->,ITECH,,(__GET_VAR(data__->ITECH,) + 1));
       };
-      if ((__GET_VAR(data__->ITECH,) > 8)) {
+      if ((__GET_VAR(data__->ITECH,) == 8)) {
         __SET_VAR(data__->,ITECH,,0);
+      } else if (((__GET_VAR(data__->ITECH,) == 8) && !(__GET_VAR(data__->I_AUTOMATICSELECTOR,)))) {
+        __SET_VAR(data__->,ITECH,,0);
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_CHECK_POSITION_OF_MOTORS);
+      } else if (((__GET_VAR(data__->ITECH,) == 8) && __GET_VAR(data__->I_STOPBTN,))) {
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_STOP);
       };
+    }
+    else if ((__case_expression == SUPERSTATESENUM__ST_CHECK_POSITION_OF_MOTORS)) {
+      __SET_VAR(data__->,SUPERSEQUENCESTATE,,7);
+      if ((((__GET_VAR(data__->I_A0,) == __BOOL_LITERAL(TRUE)) && (__GET_VAR(data__->I_B0,) == __BOOL_LITERAL(TRUE))) && (__GET_VAR(data__->I_C1,) == __BOOL_LITERAL(TRUE)))) {
+        __SET_VAR(data__->,Q_POSITIONOK,,__BOOL_LITERAL(TRUE));
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_WAIT_FOR_COMMAND);
+      } else {
+        __SET_VAR(data__->,Q_POSITIONOK,,__BOOL_LITERAL(TRUE));
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_RESET_POSITION_OF_MOTORS);
+      };
+    }
+    else if ((__case_expression == SUPERSTATESENUM__ST_STOP)) {
+      __SET_VAR(data__->,SUPERSEQUENCESTATE,,8);
       if (__GET_VAR(data__->I_STOPRESBTN,)) {
         __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_AUTOMATIC_MODE);
       };
@@ -404,10 +426,10 @@ void SUPERSTAVY_body__(SUPERSTAVY *data__) {
       };
     }
   };
-  __SET_VAR(data__->TON_0.,IN,,__GET_VAR(data__->I_B1,));
+  __SET_VAR(data__->TON_0.,IN,,__GET_VAR(data__->Q_IT,));
   __SET_VAR(data__->TON_0.,PT,,__GET_VAR(data__->BLASTINGTIME,));
   TON_body__(&data__->TON_0);
-  __SET_VAR(data__->,I_QT,,__GET_VAR(data__->TON_0.Q));
+  __SET_VAR(data__->,I_QT,,__GET_VAR(data__->TON_0.Q,));
 
   goto __end;
 
