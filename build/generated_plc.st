@@ -162,7 +162,7 @@ PROGRAM SuperStavy
         
        (* SuperStates := ST_STOP;                             (*Go to stop state*)
         
-     (* END_IF;
+     (* END_IF;*)
       
           
     ST_CHECK_POSITION_OF_MOTORS:

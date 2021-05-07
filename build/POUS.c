@@ -392,6 +392,19 @@ void SUPERSTAVY_body__(SUPERSTAVY *data__) {
       if ((__GET_VAR(data__->ITECH,) > 8)) {
         __SET_VAR(data__->,ITECH,,0);
       };
+    }
+    else if ((__case_expression == SUPERSTATESENUM__ST_CHECK_POSITION_OF_MOTORS)) {
+      __SET_VAR(data__->,SUPERSEQUENCESTATE,,7);
+      if ((((__GET_VAR(data__->I_A0,) == __BOOL_LITERAL(TRUE)) && (__GET_VAR(data__->I_B0,) == __BOOL_LITERAL(TRUE))) && (__GET_VAR(data__->I_C1,) == __BOOL_LITERAL(TRUE)))) {
+        __SET_VAR(data__->,Q_POSITIONOK,,__BOOL_LITERAL(TRUE));
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_WAIT_FOR_COMMAND);
+      } else {
+        __SET_VAR(data__->,Q_POSITIONOK,,__BOOL_LITERAL(TRUE));
+        __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_RESET_POSITION_OF_MOTORS);
+      };
+    }
+    else if ((__case_expression == SUPERSTATESENUM__ST_STOP)) {
+      __SET_VAR(data__->,SUPERSEQUENCESTATE,,8);
       if (__GET_VAR(data__->I_STOPRESBTN,)) {
         __SET_VAR(data__->,SUPERSTATES,,SUPERSTATESENUM__ST_AUTOMATIC_MODE);
       };
