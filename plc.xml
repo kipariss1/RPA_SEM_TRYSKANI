@@ -1,7 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns:ns1="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Неизвестно" productName="Unnamed" productVersion="1" creationDateTime="2021-04-15T23:27:11"/>
-  <contentHeader name="Unnamed" modificationDateTime="2021-05-07T13:23:05">
+
+  <contentHeader name="Unnamed" modificationDateTime="2021-05-07T15:02:07">
+
+
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -41,25 +44,31 @@
       <pou name="SuperStavy" pouType="program">
         <interface>
           <localVars>
-            <variable name="I_Start" address="%IX0.5">
+            <variable name="I_Start" address="%IX1.0">
               <type>
                 <BOOL/>
               </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+
               <documentation>
                 <xhtml:p><![CDATA[Start button]]></xhtml:p>
               </documentation>
             </variable>
-          </localVars>
-          <localVars>
-            <variable name="I_PowerOn">
+            <variable name="I_PowerOn" address="%IX1.1">
               <type>
                 <BOOL/>
               </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
               <documentation>
                 <xhtml:p><![CDATA[Power on button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_StopBtn">
+            <variable name="I_StopBtn" address="%IX1.2">
+
               <type>
                 <BOOL/>
               </type>
@@ -67,7 +76,7 @@
                 <xhtml:p><![CDATA[Stop button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_StopResBtn">
+            <variable name="I_StopResBtn" address="%IX1.3">
               <type>
                 <BOOL/>
               </type>
@@ -75,7 +84,7 @@
                 <xhtml:p><![CDATA[Stop reset button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_EmStopBtn">
+            <variable name="I_EmStopBtn" address="%IX1.4">
               <type>
                 <BOOL/>
               </type>
@@ -83,7 +92,7 @@
                 <xhtml:p><![CDATA[Emergency stop button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_EmStopResBtn">
+            <variable name="I_EmStopResBtn" address="%IX1.5">
               <type>
                 <BOOL/>
               </type>
@@ -91,7 +100,7 @@
                 <xhtml:p><![CDATA[Emergency stop reset button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_ManualSelector">
+            <variable name="I_ManualSelector" address="%IX1.6">
               <type>
                 <BOOL/>
               </type>
@@ -99,14 +108,19 @@
                 <xhtml:p><![CDATA[Manual mode selector button]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="I_AutomaticSelector">
+            <variable name="I_AutomaticSelector" address="%IX1.7">
               <type>
                 <BOOL/>
               </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
               <documentation>
                 <xhtml:p><![CDATA[Automatic mode selector button]]></xhtml:p>
               </documentation>
             </variable>
+          </localVars>
+          <localVars>
             <variable name="SuperStates">
               <type>
                 <derived name="SuperStatesEnum"/>
@@ -157,9 +171,7 @@
                 <xhtml:p><![CDATA[End sensor from C motor]]></xhtml:p>
               </documentation>
             </variable>
-          </localVars>
-          <localVars>
-            <variable name="I_C1">
+            <variable name="I_C1" address="%IX0.5">
               <type>
                 <BOOL/>
               </type>
@@ -167,6 +179,8 @@
                 <xhtml:p><![CDATA[End sensor from C motor]]></xhtml:p>
               </documentation>
             </variable>
+          </localVars>
+          <localVars>
             <variable name="I_Qt">
               <type>
                 <BOOL/>
@@ -177,7 +191,7 @@
             </variable>
           </localVars>
           <localVars>
-            <variable name="Q_A" address="%QX0.0">
+            <variable name="Q_A" address="%QX0.4">
               <type>
                 <BOOL/>
               </type>
@@ -185,7 +199,7 @@
                 <xhtml:p><![CDATA[A motor control]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="Q_B" address="%QX0.1">
+            <variable name="Q_B" address="%QX0.5">
               <type>
                 <BOOL/>
               </type>
@@ -193,7 +207,8 @@
                 <xhtml:p><![CDATA[B motor control]]></xhtml:p>
               </documentation>
             </variable>
-            <variable name="Q_C" address="%QX0.2">
+            <variable name="Q_C" address="%QX0.6">
+
               <type>
                 <BOOL/>
               </type>
@@ -440,11 +455,11 @@ CASE SuperStates OF
   
   ST_INICIALIZACE:
     SuperSequenceState := 1;
-    IF (I_Start = true)(* AND (I_PowerOn = true)*) THEN (*Uprava: 07.05.21*)
+    (*IF (I_Start = true) AND (I_PowerOn = true) THEN*) (*Uprava 06.05.2021*)
       
       SuperStates := ST_RESET_POSITION_OF_MOTORS;
       
-    END_IF;
+    (*END_IF;*)
     
   ST_RESET_POSITION_OF_MOTORS:
     SuperSequenceState := 2;
@@ -465,12 +480,12 @@ CASE SuperStates OF
     SuperStates := ST_MODE_SELECTION;
     
   ST_MODE_SELECTION:
-    (*SuperSequenceState := 4;
-    IF (I_ManualSelector) THEN
-        SuperStates := ST_MANUAL_MODE;
-    ELSIF (I_AutomaticSelector) THEN*)
+    SuperSequenceState := 4;
+    (*IF (I_ManualSelector) THEN
+        SuperStates := ST_MANUAL_MODE; *)  (*Uprava 06.05.2021*)
+    (*ELSIF (I_AutomaticSelector) THEN *)
         SuperStates := ST_AUTOMATIC_MODE;
-    (*END_IF;*)   (*Uprava: 07.05.21*)
+    (*END_IF;*)    (*Uprava 06.05.2021*)
     (*TODO// Comeback from this state to STOP*)
     
   ST_MANUAL_MODE:
@@ -525,21 +540,21 @@ CASE SuperStates OF
     END_IF;
     
     (*Actions after on technological sequence is done*)
-    IF (iTech = 8) THEN                         (*Program has gone throught all technological states*)
+    IF (iTech > 8) THEN                         (*Program has gone throught all technological states*)
       
       iTech := 0;                               (*Reset sequence*)
+    END_IF;
       
-    (*ELSIF (iTech = 8) AND NOT (I_AutomaticSelector) THEN  (*Program has gone throught all technological states AND automatic selector is not pressed*)
+   (*ELSIF (iTech = 8) AND NOT (I_AutomaticSelector) THEN  (*Program has gone throught all technological states AND automatic selector is not pressed*)
       
-     (* iTech := 0;                                         (*Reset sequence*) 
-      (*SuperStates := ST_CHECK_POSITION_OF_MOTORS;         (*Go to the next state*)
+    (*  iTech := 0;                                         (*Reset sequence*) 
+    (*  SuperStates := ST_CHECK_POSITION_OF_MOTORS;         (*Go to the next state*)
       
     (*ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
       
-      (*SuperStates := ST_STOP;                             (*Go to stop state*)
-      (*Uprava: 07.05.21*)
+     (* SuperStates := ST_STOP;                             (*Go to stop state*)
       
-    END_IF;
+   (* END_IF;
     
         
   ST_CHECK_POSITION_OF_MOTORS:
