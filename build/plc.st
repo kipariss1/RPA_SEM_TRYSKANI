@@ -98,35 +98,25 @@ END_TYPE
 
 PROGRAM SuperStavy
   VAR
-    I_Start : BOOL := 1;
-    I_PowerOn : BOOL := 1;
+    I_Start : BOOL;
+    I_PowerOn : BOOL;
     I_StopBtn : BOOL;
     I_StopResBtn : BOOL;
     I_EmStopBtn : BOOL;
     I_EmStopResBtn : BOOL;
     I_ManualSelector : BOOL;
-    I_AutomaticSelector : BOOL := 1;
-  END_VAR
-  VAR
+    I_AutomaticSelector : BOOL;
     SuperStates : SuperStatesEnum;
-  END_VAR
-  VAR
     I_A0 : BOOL;
     I_A1 : BOOL;
     I_B0 : BOOL;
     I_B1 : BOOL;
     I_C0 : BOOL;
     I_C1 : BOOL;
-  END_VAR
-  VAR
     I_Qt : BOOL;
-  END_VAR
-  VAR
     Q_A : BOOL;
     Q_B : BOOL;
     Q_C : BOOL;
-  END_VAR
-  VAR
     Q_PositionOk : BOOL;
     Q_PositionNotOk : BOOL;
     Q_It : BOOL;
@@ -141,7 +131,7 @@ PROGRAM SuperStavy
     TechnologicalSequenceState : INT := 0;
     SuperSequenceState : INT := 1;
     TON_0 : TON;
-    BlastingTime : TIME := t#5s;
+    BlastingTime : TIME;
   END_VAR
 
 
@@ -157,11 +147,11 @@ PROGRAM SuperStavy
     
     ST_INICIALIZACE:
       SuperSequenceState := 1;
-      (*IF (I_Start = true) AND (I_PowerOn = true) THEN*) (*Uprava 06.05.2021*)
+      IF (I_Start = true) AND (I_PowerOn = true) THEN
         
         SuperStates := ST_RESET_POSITION_OF_MOTORS;
         
-      (*END_IF;*)
+      END_IF;
       
     ST_RESET_POSITION_OF_MOTORS:
       SuperSequenceState := 2;
@@ -183,11 +173,11 @@ PROGRAM SuperStavy
       
     ST_MODE_SELECTION:
       SuperSequenceState := 4;
-      (*IF (I_ManualSelector) THEN
-          SuperStates := ST_MANUAL_MODE; *)  (*Uprava 06.05.2021*)
-      (*ELSIF (I_AutomaticSelector) THEN *)
+      IF (I_ManualSelector) THEN
+          SuperStates := ST_MANUAL_MODE;
+      ELSIF (I_AutomaticSelector) THEN
           SuperStates := ST_AUTOMATIC_MODE;
-      (*END_IF;*)    (*Uprava 06.05.2021*)
+      END_IF;
       (*TODO// Comeback from this state to STOP*)
       
     ST_MANUAL_MODE:
@@ -223,8 +213,6 @@ PROGRAM SuperStavy
         FOR iTechBit:= 0 TO 7 DO                                                            (*Making the outputs HIGH/LOW by going throught bitwise*)
             IF ((int_to_byte(OUTPT_MATX[iTech]) AND SHL(ByteCompare, iTechBit)) <> 0) THEN  (*Going throught one row of OUTPT_MATX and checking, which outputs should be TRUE*)
               Qs[iTechBit] := true;
-            ELSE
-              Qs[iTechBit] := false;
             END_IF;
         END_FOR;
         
@@ -232,7 +220,7 @@ PROGRAM SuperStavy
         Q_A := Qs[0];
         Q_B := Qs[1];
         Q_C := Qs[2];
-        Q_It := Qs[3]; 
+        Q_It := Qs[4]; 
         (*End of mapping of outputs*)
         
         TechnologicalSequenceState := iTech;      (*Remembering the technological state*)
@@ -242,21 +230,20 @@ PROGRAM SuperStavy
       END_IF;
       
       (*Actions after on technological sequence is done*)
-      IF (iTech > 8) THEN                         (*Program has gone throught all technological states*)
+      IF (iTech = 8) THEN                         (*Program has gone throught all technological states*)
         
         iTech := 0;                               (*Reset sequence*)
+        
+      ELSIF (iTech = 8) AND NOT (I_AutomaticSelector) THEN  (*Program has gone throught all technological states AND automatic selector is not pressed*)
+        
+        iTech := 0;                                         (*Reset sequence*) 
+        SuperStates := ST_CHECK_POSITION_OF_MOTORS;         (*Go to the next state*)
+        
+      ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
+        
+        SuperStates := ST_STOP;                             (*Go to stop state*)
+        
       END_IF;
-        
-     (*ELSIF (iTech = 8) AND NOT (I_AutomaticSelector) THEN  (*Program has gone throught all technological states AND automatic selector is not pressed*)
-        
-      (*  iTech := 0;                                         (*Reset sequence*) 
-      (*  SuperStates := ST_CHECK_POSITION_OF_MOTORS;         (*Go to the next state*)
-        
-      (*ELSIF (iTech = 8) AND (I_StopBtn) THEN                (*Program has gone throught all technological states AND stop btn is pressed*)
-        
-       (* SuperStates := ST_STOP;                             (*Go to stop state*)
-        
-     (* END_IF;
       
           
     ST_CHECK_POSITION_OF_MOTORS:
@@ -289,8 +276,8 @@ PROGRAM SuperStavy
 
   (*Function block calling*)
 
-  TON_0(IN := I_B1, PT := BlastingTime, Q => I_Qt);
-   
+  TON_0(IN := Q_It, PT := BlastingTime);
+  I_Qt :=  TON_0.Q; 
 
   (*End of Function block calling*)
 
