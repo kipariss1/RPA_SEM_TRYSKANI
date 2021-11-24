@@ -63,13 +63,27 @@ PROGRAM SuperStavy
     END_IF;
     
     
+    
+
+  (****************************************************************************)
+  (******Writing of inputs from interface to logical inputs to the program*****)
+  (****************************************************************************)
+
+  (*Uprava 24.11.2021*)
+
+  I_Start := int_to_bool(ScadaStart);
+
+
   (*
 
   TODO: Write of input word from scada to logical inputs (like I_Start)
 
   *)
 
-  I_Start := int_to_bool(ScadaStart);
+
+  (****************************************************************************)
+  (**************************End of Writing************************************)
+  (****************************************************************************)
 
 
 
