@@ -1,1 +1,4 @@
-this is the HMI description file
+this is the HMI description file: 
+
+
+HMI project for myScada 
