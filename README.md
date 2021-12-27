@@ -17,7 +17,8 @@ zapisovani vystupu podle OUTPT_MATX.
 O tom, co nefunguje :D :
 
 Neimplementovan "STOP", misto toho stavovy automat pada vzdy do "emergency stop" stavu, jak je ukazano v dokumentaci "stavovy_diagram_2_0.pdf". 
-Neni implementovany manual mode taky.
+Neni implementovany manual mode taky. !Najisto spravny kod je v souboru SuperstavyAllBugsFixed! (Pokud neco nebude fungovat, prekopiruj kod a promenne vcetne jejich
+adres ze souboru SuperstavyAllBugsFixed.st)
 
 O tom jak otevrit project HMI:
 
