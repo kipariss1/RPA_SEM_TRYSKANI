@@ -16,4 +16,4 @@ zapisovani vystupu podle OUTPT_MATX.
 
 O tom, co nefunguje :D :
 
-Nefunhuje "STOP", ani "EMERGENCY STOP", ale je to opraveny v "develop-HMI" branch. Neni implementovany manual mode taky.
+Nefunhuje "STOP", ani "EMERGENCY STOP", ale je to opraveny v "SVDV - Navrh SCADA" branch. Neni implementovany manual mode taky.
